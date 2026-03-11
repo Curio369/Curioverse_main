@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curio's Universe</title>
+    <meta name="description" content="Personal website of Curio - Robotics enthusiast, creator, and Dark Knight fan.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <header>
+        <div class="logo">CURIO</div>
+        <nav>
+            <a href="https://www.youtube.com/@CurioRockerz" target="_blank" class="yt-link" id="nav-youtube">
+                <i class="fa-brands fa-youtube"></i> CurioRockerz
+            </a>
+            <a href="#resume" class="resume-btn" id="nav-resume"><i class="fa-solid fa-file-pdf"></i> Resume</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Hobbies Section (Left) -->
+        <section class="glass-card hobbies-section" id="hobbies">
+            <h2><i class="fa-solid fa-microchip"></i> Hobbies & Interests</h2>
+            <ul class="hobby-list">
+                <li>
+                    <h3>Robotics</h3>
+                    <p>Building, coding, and exploring the mechanics of the future.</p>
+                </li>
+                <li>
+                    <h3>Tech Exploration</h3>
+                    <p>Always dissecting how things work under the hood.</p>
+                </li>
+                <li>
+                    <h3>Add More Here</h3>
+                    <p>Modify this space whenever you find a new passion!</p>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Center Profile Section with Batman Reveal -->
+        <section class="profile-center">
+            <div class="spotlight-container" id="profileSpotlight">
+                <!-- Base Normal Image -->
+                <img src="assets/profile-normal.png" alt="Curio" class="base-img">
+                <!-- Reveal Batman Image -->
+                <img src="assets/profile-batman.png" alt="Batman Persona" class="reveal-img">
+            </div>
+            <h1 class="glitch-text" data-text="THE SHADOW">THE SHADOW</h1>
+            <p class="tagline">Developer | Creator | Night Owl</p>
+        </section>
+
+        <!-- Watchlist Section (Right) -->
+        <section class="glass-card watchlist-section" id="watchlist">
+            <h2><i class="fa-solid fa-film"></i> Watchlist</h2>
+            <div class="poster-grid">
+                <div class="poster-card">
+                    <img src="assets/poster_batman.png" alt="The Dark Knight Trilogy">
+                    <div class="poster-info">
+                        <span class="title">The Dark Knight Trilogy</span>
+                        <span class="badge">Masterpiece</span>
+                    </div>
+                </div>
+                <div class="poster-card">
+                    <img src="assets/poster_dexter.png" alt="Dexter">
+                    <div class="poster-info">
+                        <span class="title">Dexter</span>
+                    </div>
+                </div>
+                <div class="poster-card">
+                    <img src="assets/poster_dark.png" alt="Dark">
+                    <div class="poster-info">
+                        <span class="title">Dark</span>
+                        <span class="badge">Mindbending</span>
+                    </div>
+                </div>
+                <div class="poster-card">
+                    <img src="assets/poster_bb.png" alt="Breaking Bad">
+                    <div class="poster-info">
+                        <span class="title">Breaking Bad</span>
+                    </div>
+                </div>
+                <div class="poster-card">
+                    <img src="assets/poster_bcs.png" alt="Better Call Saul">
+                    <div class="poster-info">
+                        <span class="title">Better Call Saul</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
