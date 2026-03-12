@@ -10,8 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Custom Magnetic Cursor -->
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="cursor-glow" id="cursorGlow"></div>
+
     <div class="background-overlay"></div>
-    
+    <canvas id="bg-canvas"></canvas>
+    <div class="noise-overlay"></div>
+
     <header>
         <div class="logo">CURIO</div>
         <nav>
@@ -23,77 +29,118 @@
     </header>
 
     <main class="container">
-        <!-- Hobbies Section (Left) -->
-        <section class="glass-card hobbies-section" id="hobbies">
-            <h2><i class="fa-solid fa-microchip"></i> Hobbies & Interests</h2>
-            <ul class="hobby-list">
-                <li>
-                    <h3>Robotics</h3>
-                    <p>Building, coding, and exploring the mechanics of the future.</p>
-                </li>
-                <li>
-                    <h3>Tech Exploration</h3>
-                    <p>Always dissecting how things work under the hood.</p>
-                </li>
-                <li>
-                    <h3>Add More Here</h3>
-                    <p>Modify this space whenever you find a new passion!</p>
-                </li>
-            </ul>
-        </section>
+        <!-- New Bento Grid Layout -->
+        <div class="bento-grid">
+            
+            <!-- Hero / Profile Card (Center focus, but in grid) -->
+            <section class="glass-card bento-hero hidden-section">
+                <div class="spotlight-container" id="profileSpotlight">
+                    <!-- Base Normal Image -->
+                    <img src="assets/profile-normal.png" alt="Curio" class="base-img">
+                    <!-- Reveal Batman Image -->
+                    <img src="assets/profile-batman.png" alt="Batman Persona" class="reveal-img">
+                </div>
+                <h1 class="glitch-text" data-text="THE SHADOW">THE SHADOW</h1>
+                <p class="tagline">Engineering Student | Software Developer</p>
+            </section>
 
-        <!-- Center Profile Section with Batman Reveal -->
-        <section class="profile-center">
-            <div class="spotlight-container" id="profileSpotlight">
-                <!-- Base Normal Image -->
-                <img src="assets/profile-normal.png" alt="Curio" class="base-img">
-                <!-- Reveal Batman Image -->
-                <img src="assets/profile-batman.png" alt="Batman Persona" class="reveal-img">
-            </div>
-            <h1 class="glitch-text" data-text="THE SHADOW">THE SHADOW</h1>
-            <p class="tagline">Developer | Creator | Night Owl</p>
-        </section>
+            <!-- Card 1: About Me & IIT Mandi -->
+            <section class="glass-card bento-about hidden-section" id="about">
+                <h2><i class="fa-solid fa-user-astronaut"></i> Identify</h2>
+                <div class="iit-mandi-tag">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <span>IIT Mandi</span>
+                    <div class="tag-glow"></div>
+                </div>
+                <p class="about-text">
+                    Engineering student passionate about dissecting tech. Architecting solutions using <strong>C++</strong>, <strong>Python</strong>, and solid <strong>DSA</strong> fundamentals. Built in the shadows, deployed to the world.
+                </p>
+                
+                <!-- Floating Tech Stack Icons -->
+                <div class="tech-stack">
+                    <div class="tech-icon floating-1"><i class="fa-brands fa-python"></i></div>
+                    <div class="tech-icon floating-2"><strong>C++</strong></div>
+                    <div class="tech-icon floating-3"><i class="fa-solid fa-square-root-variable"></i></div>
+                </div>
+            </section>
 
-        <!-- Watchlist Section (Right) -->
-        <section class="glass-card watchlist-section" id="watchlist">
-            <h2><i class="fa-solid fa-film"></i> Watchlist</h2>
-            <div class="poster-grid">
-                <div class="poster-card">
-                    <img src="assets/poster_batman.png" alt="The Dark Knight Trilogy">
-                    <div class="poster-info">
-                        <span class="title">The Dark Knight Trilogy</span>
-                        <span class="badge">Masterpiece</span>
+            <!-- Card 2: Wayne Enterprises R&D (Projects) -->
+            <section class="glass-card bento-projects hidden-section" id="projects">
+                <h2><i class="fa-solid fa-flask"></i> Wayne Enterprises R&D</h2>
+                <div class="project-card">
+                    <div class="project-info">
+                        <h3>PDF-to-NTA Exam Interface</h3>
+                        <p>A high-performance converter that translates standard PDFs into interactive NTA-style mock examinations.</p>
+                    </div>
+                    <div class="project-tech-reveal">
+                        <span>Python</span> • <span>PyMuPDF</span> • <span>React</span>
                     </div>
                 </div>
-                <div class="poster-card">
-                    <img src="assets/poster_dexter.png" alt="Dexter">
-                    <div class="poster-info">
-                        <span class="title">Dexter</span>
+            </section>
+
+            <!-- Card 3: Astrophotography -->
+            <section class="glass-card bento-astro hidden-section" id="astro">
+                <h2><i class="fa-solid fa-meteor"></i> Astrophotography</h2>
+                <div class="astro-gallery">
+                    <div class="astro-item">
+                        <i class="fa-solid fa-moon"></i>
+                        <span>Lunar Phase</span>
+                    </div>
+                    <div class="astro-item">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                        <span>Deep Sky</span>
                     </div>
                 </div>
-                <div class="poster-card">
-                    <img src="assets/poster_dark.png" alt="Dark">
-                    <div class="poster-info">
-                        <span class="title">Dark</span>
-                        <span class="badge">Mindbending</span>
+            </section>
+
+            <!-- Card 4: Watchlist Gallery -->
+            <section class="glass-card bento-watchlist hidden-section" id="watchlist">
+                <h2><i class="fa-solid fa-film"></i> Neural Network (Watchlist)</h2>
+                <div class="watchlist-horizontal">
+                    <div class="poster-card-small">
+                        <img src="assets/poster_batman.png" alt="The Dark Knight">
+                    </div>
+                    <div class="poster-card-small">
+                        <img src="assets/poster_dexter.png" alt="Dexter">
+                    </div>
+                    <div class="poster-card-small">
+                        <img src="assets/poster_dark.png" alt="Dark">
+                    </div>
+                    <div class="poster-card-small">
+                        <img src="assets/poster_bb.png" alt="Breaking Bad">
+                    </div>
+                    <div class="poster-card-small">
+                        <img src="assets/poster_bcs.png" alt="Better Call Saul">
                     </div>
                 </div>
-                <div class="poster-card">
-                    <img src="assets/poster_bb.png" alt="Breaking Bad">
-                    <div class="poster-info">
-                        <span class="title">Breaking Bad</span>
-                    </div>
-                </div>
-                <div class="poster-card">
-                    <img src="assets/poster_bcs.png" alt="Better Call Saul">
-                    <div class="poster-info">
-                        <span class="title">Better Call Saul</span>
-                    </div>
+            </section>
+
+        </div>
+
+        <!-- Full Width Contact Section (Stays intact) -->
+        <section class="glass-card contact-section hidden-section" id="contact">
+            <div class="contact-content">
+                <h2><i class="fa-solid fa-satellite-dish"></i> Establish Connection</h2>
+                <p>Looking to collaborate, solve a problem, or just talk tech and movies? My comms channel is open.</p>
+                
+                <a href="mailto:curiozii369@gmail.com" class="primary-btn"><i class="fa-regular fa-envelope"></i> Initiate Transmission</a>
+                
+                <div class="social-links">
+                    <a href="https://github.com/curio369" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/kartikey-gupta-93053427b/" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://x.com/curio369" target="_blank" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://instagram.com/k4curio" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                 </div>
             </div>
         </section>
     </main>
 
+    <footer class="site-footer">
+        <p>&copy; 2026 CurioVerse. Built in the shadows.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
