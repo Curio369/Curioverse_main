@@ -75,6 +75,14 @@ body.hovering .cursor-glow {
     pointer-events: none;
 }
 
+#fg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 50; /* Sits above all UI elements */
+    pointer-events: none; /* Let clicks pass through to the UI */
+}
+
 .noise-overlay {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -412,44 +420,278 @@ h2 {
     color: var(--text-primary);
 }
 
-/* --- Watchlist Horizontal Scroll --- */
-.watchlist-horizontal {
+/* --- The Curio-Vault --- */
+.vault-header {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.vault-header h2 {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.vault-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    gap: 0.5rem;
+    width: 250px;
+}
+
+.vault-search i {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.vault-search input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    width: 100%;
+    outline: none;
+}
+.vault-search input::placeholder {
+    color: var(--text-secondary);
+}
+
+.vault-suggestions {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    overflow: hidden;
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+}
+
+.vault-suggestions.active {
+    display: flex;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
     gap: 1rem;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+.suggestion-item:hover {
+    background: rgba(247, 192, 15, 0.1);
+}
+
+.suggestion-item img {
+    width: 30px;
+    height: 45px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.suggestion-item span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.vault-viewport {
+    perspective: 1000px;
     overflow-x: auto;
-    padding-bottom: 1rem;
-    
-    /* Hide scrollbar for clean look */
+    overflow-y: hidden;
+    padding: 2rem 0;
+    /* Hide scrollbar */
     scrollbar-width: none; 
 }
-.watchlist-horizontal::-webkit-scrollbar {
-    display: none;
+.vault-viewport::-webkit-scrollbar { display: none; }
+
+.vault-grid {
+    display: flex;
+    gap: 1.5rem;
+    transform-style: preserve-3d;
+    min-width: max-content;
+    padding: 0 1rem;
 }
 
-.poster-card-small {
-    min-width: 140px;
-    height: 210px;
-    border-radius: 10px;
-    overflow: hidden;
+.poster-card-vault {
+    width: 160px;
+    height: 240px;
+    border-radius: 12px;
     position: relative;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
     flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
-.poster-card-small img {
+.poster-card-vault img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s;
+    transition: transform 0.4s;
 }
 
-.poster-card-small:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+/* Masterpiece Hover Effect */
+.poster-card-vault.masterpiece:hover {
+    transform: translateY(-15px) scale(1.05) translateZ(50px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 20px rgba(247, 192, 15, 0.2);
+    border-color: var(--accent);
+    z-index: 10;
 }
-.poster-card-small:hover img {
-    transform: scale(1.05);
+
+/* Data Overlay (IMDb, Curio-Rating, Fav) */
+.vault-data-overlay {
+    position: absolute;
+    bottom: -100%; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 1rem;
+    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.poster-card-vault.masterpiece:hover .vault-data-overlay {
+    bottom: 0;
+}
+
+.vault-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imdb-score {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.imdb-score i {
+    color: var(--accent);
+    filter: drop-shadow(0 0 5px var(--accent));
+}
+
+.curio-rating {
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    line-height: 1.4;
+    text-align: center;
+    font-style: italic;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 0.8rem;
+}
+
+/* Custom Favorite Slider inside Overlay */
+.favorite-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    justify-content: center;
+    margin-top: auto;
+}
+.favorite-toggle input { display: none; }
+.slider {
+    position: relative;
+    width: 40px; height: 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    transition: 0.3s;
+}
+.slider::before {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    left: 2px; bottom: 2px;
+    background: #fff;
+    transition: 0.3s;
+}
+.favorite-toggle input:checked + .slider { background: var(--accent); }
+.favorite-toggle input:checked + .slider::before { transform: translateX(20px); background: #000; }
+.fav-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Chronicle New Entry Card */
+.vault-add-new {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.3);
+    cursor: pointer;
+    gap: 1rem;
+}
+
+.vault-add-new:hover {
+    border-color: #0f0;
+    background: rgba(0, 255, 0, 0.05);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 255, 0, 0.2);
+}
+
+.add-icon i {
+    font-size: 2.5rem;
+    color: rgba(255,255,255,0.5);
+    transition: 0.3s;
+}
+
+.vault-add-new:hover .add-icon i {
+    color: #0f0;
+    text-shadow: 0 0 15px #0f0;
+}
+
+.vault-add-new span {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+.vault-add-new:hover span { color: #fff; }
+
+/* Archive Background Posters (Simulating Depth) */
+.back-row {
+    transform: translateZ(-100px) scale(0.85);
+    filter: brightness(0.4) blur(1px);
+    z-index: -1;
+}
+.back-row.far {
+    transform: translateZ(-200px) scale(0.7);
+    filter: brightness(0.2) blur(3px);
+    z-index: -2;
+}
+.back-row.dim {
+    filter: brightness(0.1) blur(4px);
+    opacity: 0.5;
 }
 
 /* Profile Center & Reveal Effect */

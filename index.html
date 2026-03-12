@@ -16,6 +16,7 @@
 
     <div class="background-overlay"></div>
     <canvas id="bg-canvas"></canvas>
+    <canvas id="fg-canvas"></canvas>
     <div class="noise-overlay"></div>
 
     <header>
@@ -93,24 +94,113 @@
                 </div>
             </section>
 
-            <!-- Card 4: Watchlist Gallery -->
+            <!-- Card 4: The Vault (Watchlist) -->
             <section class="glass-card bento-watchlist hidden-section" id="watchlist">
-                <h2><i class="fa-solid fa-film"></i> Neural Network (Watchlist)</h2>
-                <div class="watchlist-horizontal">
-                    <div class="poster-card-small">
-                        <img src="assets/poster_batman.png" alt="The Dark Knight">
+                <div class="vault-header">
+                    <h2><i class="fa-solid fa-film"></i> The Vault</h2>
+                    <div class="vault-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search archive..." id="vaultSearchInput" autocomplete="off">
+                        <div class="vault-suggestions" id="vaultSuggestions"></div>
                     </div>
-                    <div class="poster-card-small">
-                        <img src="assets/poster_dexter.png" alt="Dexter">
-                    </div>
-                    <div class="poster-card-small">
-                        <img src="assets/poster_dark.png" alt="Dark">
-                    </div>
-                    <div class="poster-card-small">
-                        <img src="assets/poster_bb.png" alt="Breaking Bad">
-                    </div>
-                    <div class="poster-card-small">
-                        <img src="assets/poster_bcs.png" alt="Better Call Saul">
+                </div>
+                
+                <div class="vault-viewport">
+                    <div class="vault-grid">
+                        
+                        <!-- Chronicle New Entry Card -->
+                        <div class="poster-card-vault vault-add-new">
+                            <div class="add-icon"><i class="fa-solid fa-plus"></i></div>
+                            <span>Chronicle Entry</span>
+                        </div>
+
+                        <!-- Masterpiece 1 -->
+                        <div class="poster-card-vault masterpiece">
+                            <img src="assets/poster_batman.png" alt="The Dark Knight">
+                            <div class="vault-data-overlay">
+                                <div class="vault-rating">
+                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 9.0</span>
+                                </div>
+                                <p class="curio-rating">"A masterclass in tension and chaos."</p>
+                                <label class="favorite-toggle">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                    <span class="fav-text">Favorite</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Masterpiece 2 -->
+                        <div class="poster-card-vault masterpiece">
+                            <img src="assets/poster_dexter.png" alt="Dexter">
+                            <div class="vault-data-overlay">
+                                <div class="vault-rating">
+                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 8.6</span>
+                                </div>
+                                <p class="curio-rating">"Fascinating psychological thriller."</p>
+                                <label class="favorite-toggle">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                    <span class="fav-text">Favorite</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Masterpiece 3 -->
+                        <div class="poster-card-vault masterpiece">
+                            <img src="assets/poster_dark.png" alt="Dark">
+                            <div class="vault-data-overlay">
+                                <div class="vault-rating">
+                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 8.8</span>
+                                </div>
+                                <p class="curio-rating">"The ultimate mindbending time loop."</p>
+                                <label class="favorite-toggle">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                    <span class="fav-text">Favorite</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Masterpiece 4 -->
+                        <div class="poster-card-vault masterpiece">
+                            <img src="assets/poster_bb.png" alt="Breaking Bad">
+                            <div class="vault-data-overlay">
+                                <div class="vault-rating">
+                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 9.5</span>
+                                </div>
+                                <p class="curio-rating">"Perfection from start to finish."</p>
+                                <label class="favorite-toggle">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                    <span class="fav-text">Favorite</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Masterpiece 5 -->
+                        <div class="poster-card-vault masterpiece">
+                            <img src="assets/poster_bcs.png" alt="Better Call Saul">
+                            <div class="vault-data-overlay">
+                                <div class="vault-rating">
+                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 8.9</span>
+                                </div>
+                                <p class="curio-rating">"Slow burn brilliance, unmatched cinematography."</p>
+                                <label class="favorite-toggle">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                    <span class="fav-text">Favorite</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Background Padding Elements (to simulate deep archive) -->
+                        <div class="poster-card-vault back-row"><img src="https://upload.wikimedia.org/wikipedia/en/8/81/ShawshankRedemptionMoviePoster.jpg" alt="Archive"></div>
+                        <div class="poster-card-vault back-row dim"><img src="https://upload.wikimedia.org/wikipedia/en/b/b5/12_Angry_Men_%281957_film_poster%29.jpg" alt="Archive"></div>
+                        <div class="poster-card-vault back-row"><img src="https://upload.wikimedia.org/wikipedia/en/1/17/Batman_Begins_Poster.jpg" alt="Archive"></div>
+                        <div class="poster-card-vault back-row far"><img src="https://upload.wikimedia.org/wikipedia/en/8/8a/Dark_Knight_Rises_poster.jpg" alt="Archive"></div>
+                        <div class="poster-card-vault back-row far dim"><img src="https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg" alt="Archive"></div>
+
                     </div>
                 </div>
             </section>
