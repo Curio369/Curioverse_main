@@ -7,7 +7,7 @@
     <meta name="description" content="Personal website of Curio - Robotics enthusiast, creator, and Dark Knight fan.">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <!-- Custom Magnetic Cursor -->
@@ -18,6 +18,9 @@
     <canvas id="bg-canvas"></canvas>
     <canvas id="fg-canvas"></canvas>
     <div class="noise-overlay"></div>
+
+    <!-- DNA Helix -->
+    <div class="dna-helix" id="dnaHelix"></div>
 
     <header>
         <div class="logo">CURIO</div>
@@ -57,39 +60,103 @@
                     Engineering student passionate about dissecting tech. Architecting solutions using <strong>C++</strong>, <strong>Python</strong>, and solid <strong>DSA</strong> fundamentals. Built in the shadows, deployed to the world.
                 </p>
                 
-                <!-- Floating Tech Stack Icons -->
-                <div class="tech-stack">
-                    <div class="tech-icon floating-1"><i class="fa-brands fa-python"></i></div>
-                    <div class="tech-icon floating-2"><strong>C++</strong></div>
-                    <div class="tech-icon floating-3"><i class="fa-solid fa-square-root-variable"></i></div>
+            </section>
+
+            <!-- Card 2: Utility Belt -->
+            <section class="glass-card bento-utility hidden-section" id="skills">
+                <h2><i class="fa-solid fa-toolbox"></i> Utility Belt</h2>
+                <div class="skills-container">
+                    <span class="skill-tag"><i class="fa-brands fa-python"></i> Python</span>
+                    <span class="skill-tag"><i class="fa-solid fa-code"></i> C++</span>
+                    <span class="skill-tag"><i class="fa-solid fa-network-wired"></i> DSA</span>
+                    <span class="skill-tag"><i class="fa-solid fa-film"></i> Video Editing</span>
+                    <span class="skill-tag"><i class="fa-solid fa-pen-nib"></i> Designing</span>
                 </div>
             </section>
 
-            <!-- Card 2: Wayne Enterprises R&D (Projects) -->
+            <!-- Card 3: Experience -->
+            <section class="glass-card bento-experience hidden-section" id="experience">
+                <h2><i class="fa-solid fa-microchip"></i> Operations</h2>
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <h3>IIT Mandi Robotronics Club</h3>
+                        <span class="exp-date">Present</span>
+                    </div>
+                    <p class="exp-desc">Active member specializing in hardware and robotics. Building next-generation automated systems.</p>
+                </div>
+            </section>
+
+            <!-- Card 4: Milestones -->
+            <section class="glass-card bento-milestones hidden-section" id="milestones">
+                <h2><i class="fa-solid fa-trophy"></i> Tactical Milestones</h2>
+                <div class="milestone-timeline">
+                    <div class="milestone">
+                        <div class="milestone-dot"></div>
+                        <div class="milestone-content">
+                            <h4>1st Prize - Line Maze Solver</h4>
+                            <p>Xpecto (Himalayas Biggest Techfest) • ₹25K Prize</p>
+                            <div class="milestone-gallery">
+                                <!-- Place your images for this event here -->
+                                <img src="assets/placeholder.png" alt="Xpecto Memory 1" class="milestone-img" data-full="assets/placeholder.png">
+                                <img src="assets/placeholder.png" alt="Xpecto Memory 2" class="milestone-img" data-full="assets/placeholder.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-dot"></div>
+                        <div class="milestone-content">
+                            <h4>1st Prize - RC Car Race</h4>
+                            <p>Utkarsh (IIT Mandi Event)</p>
+                            <div class="milestone-gallery">
+                                <!-- Place your images for this event here -->
+                                <img src="assets/placeholder.png" alt="Utkarsh Memory 1" class="milestone-img" data-full="assets/placeholder.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Card 4.5: Spotify -->
+            <section class="glass-card bento-spotify hidden-section" id="spotify">
+                <h2><i class="fa-brands fa-spotify" style="color: #1ed760;"></i> Sonic Profile</h2>
+                <div class="spotify-content">
+                    <p>Tap into my coding frequencies, playlists, and favorite dark synthwave mixes.</p>
+                    <!-- Replace the href with your actual Spotify link -->
+                    <a href="https://open.spotify.com/" target="_blank" class="spotify-btn">Follow on Spotify</a>
+                </div>
+            </section>
+
+            <!-- Card 5: Wayne Enterprises R&D (Projects) -->
             <section class="glass-card bento-projects hidden-section" id="projects">
                 <h2><i class="fa-solid fa-flask"></i> Wayne Enterprises R&D</h2>
-                <div class="project-card">
-                    <div class="project-info">
-                        <h3>PDF-to-NTA Exam Interface</h3>
-                        <p>A high-performance converter that translates standard PDFs into interactive NTA-style mock examinations.</p>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-info">
+                            <h3>PDF-to-NTA Interface (Ongoing)</h3>
+                            <p>An ongoing AI/ML project that translates standard PDFs into interactive NTA-style mock examinations.</p>
+                        </div>
+                        <div class="project-tech-reveal"><span>Python</span> • <span>AI/ML</span> • <span>React</span></div>
                     </div>
-                    <div class="project-tech-reveal">
-                        <span>Python</span> • <span>PyMuPDF</span> • <span>React</span>
+                    <div class="project-card">
+                        <div class="project-info">
+                            <h3>WIFI-RC-CAR</h3>
+                            <p>Custom-built remote controlled car operating via local WiFi network packets.</p>
+                        </div>
+                        <div class="project-tech-reveal"><span>C++</span> • <span>Hardware</span></div>
                     </div>
-                </div>
-            </section>
-
-            <!-- Card 3: Astrophotography -->
-            <section class="glass-card bento-astro hidden-section" id="astro">
-                <h2><i class="fa-solid fa-meteor"></i> Astrophotography</h2>
-                <div class="astro-gallery">
-                    <div class="astro-item">
-                        <i class="fa-solid fa-moon"></i>
-                        <span>Lunar Phase</span>
+                    <div class="project-card">
+                        <div class="project-info">
+                            <h3>Frontend-Fury</h3>
+                            <p>An interactive frontend component library with aesthetic designs and creative UI interactions.</p>
+                        </div>
+                        <div class="project-tech-reveal"><span>JavaScript</span> • <span>Frontend</span></div>
                     </div>
-                    <div class="astro-item">
-                        <i class="fa-solid fa-user-astronaut"></i>
-                        <span>Deep Sky</span>
+                    <div class="project-card">
+                        <div class="project-info">
+                            <h3>Line-Maze-Solver</h3>
+                            <p>Advanced autonomous solver capable of mapping and navigating unknown line mazes.</p>
+                        </div>
+                        <div class="project-tech-reveal"><span>C++</span> • <span>Hardware</span></div>
                     </div>
                 </div>
             </section>
@@ -98,20 +165,33 @@
             <section class="glass-card bento-watchlist hidden-section" id="watchlist">
                 <div class="vault-header">
                     <h2><i class="fa-solid fa-film"></i> The Vault</h2>
-                    <div class="vault-search">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="Search archive..." id="vaultSearchInput" autocomplete="off">
-                        <div class="vault-suggestions" id="vaultSuggestions"></div>
+                    <div class="vault-filters">
+                        <select id="filterGenre">
+                            <option value="all">All Genres</option>
+                            <option value="action">Action</option>
+                            <option value="drama">Drama</option>
+                            <option value="sci-fi">Sci-Fi</option>
+                            <option value="thriller">Thriller</option>
+                            <option value="comedy">Comedy</option>
+                            <option value="horror">Horror</option>
+                            <option value="animation">Animation</option>
+                        </select>
+                        <select id="filterRating">
+                            <option value="all">All Ratings</option>
+                            <option value="9">9+ ★</option>
+                            <option value="8">8+ ★</option>
+                            <option value="7">7+ ★</option>
+                        </select>
                     </div>
                 </div>
                 
                 <div class="vault-viewport">
                     <div class="vault-grid">
                         
-                        <!-- Chronicle New Entry Card -->
-                        <div class="poster-card-vault vault-add-new">
+                        <!-- Add New Movie Card -->
+                        <div class="poster-card-vault vault-add-new" id="addMovieBtn">
                             <div class="add-icon"><i class="fa-solid fa-plus"></i></div>
-                            <span>Chronicle Entry</span>
+                            <span>Add New Movie</span>
                         </div>
 
                         <!-- Masterpiece 1 -->
@@ -224,6 +304,30 @@
             </div>
         </section>
     </main>
+
+    <!-- Movie Search Modal -->
+    <div id="movieSearchModal" class="movie-search-modal">
+        <div class="movie-search-panel">
+            <span class="movie-search-close" id="movieSearchClose">&times;</span>
+            <h2><i class="fa-solid fa-magnifying-glass"></i> Search Movies</h2>
+            <div class="movie-search-bar">
+                <input type="text" id="omdbSearchInput" placeholder="Type a movie name..." autocomplete="off">
+                <button id="omdbSearchBtn"><i class="fa-solid fa-search"></i></button>
+            </div>
+            <div class="movie-suggestions" id="movieSuggestions">
+                <p class="suggestions-label">Popular Picks</p>
+                <div class="suggestions-grid" id="suggestionsGrid"></div>
+            </div>
+            <div class="movie-search-results" id="omdbResults"></div>
+        </div>
+    </div>
+
+    <!-- Global Image Modal for Previews -->
+    <div id="imageModal" class="image-modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="modalCaption"></div>
+    </div>
 
     <footer class="site-footer">
         <p>&copy; 2026 CurioVerse. Built in the shadows.</p>
