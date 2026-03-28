@@ -2,6 +2,29 @@
 
 *This file tracks all automated or AI-assisted features, upgrades, and modifications made to the project across all sessions.*
 
+## [2026-03-26 01:34] - Interactive 3D Web Experience Polish
+- **Added:** Nested "Inner Core" Icosahedron to the background scene with counter-rotational animation for added mechanical depth.
+- **Added:** "Tech Debris" Field consisting of 15 floating low-poly wireframe shapes (Tetrahedrons/Octahedrons) with randomized drift and rotation.
+- **Implemented:** Mouse Repulsion Physics using normalized coordinate projection. Background debris and foreground particles now active avoid the cursor with a spring-like force.
+- **Optimized:** Foreground particle shader with distance-based clip-space repulsion logic and smoother cubic falloff for a cleaner glow.
+
+## [2026-03-26 01:28] - GPU-Accelerated DNA & Premium UX Sprung Interactions
+- **Optimized:** DNA Helix animation `margins/top → translate3d/scale`. Eliminated layout thrashing by moving animation logic to the GPU via hardware-accelerated transforms.
+- **Added:** `will-change: transform` to all DNA elements (`.dna-rung`, `.dna-node`, `.dna-bar`) for proactive layer promotion.
+- **Upgraded:** CSS transitions `0.3s ease → 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)` for high-end "sprung" micro-interactions on skill tags, cards, and milestone images.
+- **Added:** Dynamic performance-safe scale effects (`1.05/1.1`) and high-fidelity box-shadow glows to hover states, following `@ui-ux-pro-max` premium standards.
+- **Integrated:** Stitch MCP project `CurioVerse Batman UI Redesign` for layout inspiration and AI-driven variant generation.
+
+## [2026-03-22 18:15] - Dense Flowing Strands & Zero-Jitter Scroll
+- **Upgraded:** Particle count `40 → 150`, base point size `150 → 350` for thicker, more prominent strands.
+- **Upgraded:** Movement amplitude Y `1.5 → 3.5`, X `0.5 → 2.0`, added Z-axis drift `±1.0` for longer, sweeping flowing motion.
+- **Added:** Per-particle speed variation attribute (`aSpeed: 0.3-1.0`) so strands move at different paces.
+- **Added:** `smoothstep` cubic edge falloff in fragment shader for softer, more organic glow.
+- **Upgraded:** Opacity `0.2+0.15 → 0.30+0.20` pulse with dynamic `vAlphaBoost` for brighter, livelier particles.
+- **Added:** `scrollOffset` uniform smoothly lerped on CPU (`0.003` factor) \u2014 particles now drift with scroll parallax instead of being static.
+- **Fixed:** All 3 scroll event listeners now use `{ passive: true }` to prevent browser scroll-blocking jank.
+- **Tuned:** Wider particle spread: X `30→40`, Y `20→30`, Z depth `5→8` units.
+
 ## [2026-03-22 18:11] - Ultra-smooth Cinematic Scroll Pass
 - **Tuned:** Background scroll lerp `0.015 → 0.004` for near-zero jitter interpolation.
 - **Tuned:** Background rotation easing `0.02 → 0.006` for glacial, cinematic shape drift.

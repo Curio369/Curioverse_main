@@ -1,0 +1,23 @@
+# Environment variables (contains API keys)
+.env
+.env.local
+.env.*.local
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node modules (if any)
+node_modules/
+
+# Agent/AI config (optional - remove if you want to track these)
+.agent/
+.gemini/

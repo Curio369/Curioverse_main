@@ -98,19 +98,68 @@ if (canvas && typeof THREE !== 'undefined') {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // 4. Create Creative Geometric Object (A fractured dark tech crystal/Icosahedron)
+    // 4. Create Creative Geometric Object (A nested dark tech crystal)
     const geometry = new THREE.IcosahedronGeometry(2, 1);
+    const innerGeometry = new THREE.IcosahedronGeometry(1.2, 0); // Sharper, simpler core
     
-    // We use a wireframe material with the golden accent color for a futuristic, gadget schematic vibe
     const material = new THREE.MeshBasicMaterial({ 
         color: 0xf7c00f, 
         wireframe: true, 
         transparent: true,
         opacity: 0.15 
     });
+
+    const innerMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.05
+    });
     
     const shape = new THREE.Mesh(geometry, material);
+    const innerShape = new THREE.Mesh(innerGeometry, innerMaterial);
+    shape.add(innerShape); // Nesting it for synchronized base movement
     scene.add(shape);
+
+    // --- ADD TECH DEBRIS FIELD ---
+    const debris = [];
+    const debrisCount = 15;
+    const debrisGeometries = [
+        new THREE.TetrahedronGeometry(0.5, 0),
+        new THREE.OctahedronGeometry(0.4, 0)
+    ];
+
+    for (let i = 0; i < debrisCount; i++) {
+        const debMaterial = new THREE.MeshBasicMaterial({
+            color: 0xf7c00f,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.1
+        });
+        const debMesh = new THREE.Mesh(
+            debrisGeometries[Math.floor(Math.random() * debrisGeometries.length)],
+            debMaterial
+        );
+        
+        // Random spread
+        debMesh.position.set(
+            (Math.random() - 0.5) * 15,
+            (Math.random() - 0.5) * 15,
+            (Math.random() - 0.5) * 5 - 2
+        );
+        
+        // Random initial rotation
+        debMesh.rotation.set(Math.random() * 10, Math.random() * 10, Math.random() * 10);
+        
+        // Store speed meta-data
+        debMesh.userData = {
+            rotSpeed: (Math.random() - 0.5) * 0.02,
+            floatSpeed: 0.1 + Math.random() * 0.3
+        };
+
+        scene.add(debMesh);
+        debris.push(debMesh);
+    }
 
     // Initial subtle rotation
     shape.rotation.x = Math.PI / 4;
@@ -124,7 +173,7 @@ if (canvas && typeof THREE !== 'undefined') {
 
     window.addEventListener('scroll', () => {
         currentScroll = window.scrollY;
-    });
+    }, { passive: true });
 
     // 6. Animation Loop
     const clock = new THREE.Clock();
@@ -133,18 +182,48 @@ if (canvas && typeof THREE !== 'undefined') {
         const elapsedTime = clock.getElapsedTime();
 
         // Smoothly interpolate scroll value (eliminates jitter)
-        smoothScrollBg += (currentScroll - smoothScrollBg) * 0.004;
+        smoothScrollBg += (currentScroll - smoothScrollBg) * 0.04;
 
         // Map smoothed scroll to target rotation
         targetRotationY = (smoothScrollBg * 0.003) + Math.PI / 4;
         targetRotationX = (smoothScrollBg * 0.002) + Math.PI / 4;
 
         // Add a slow constant idle rotation combined with the scroll target for a fluid feel
-        shape.rotation.y += (targetRotationY + Math.sin(elapsedTime * 0.2) * 0.5 - shape.rotation.y) * 0.006;
-        shape.rotation.x += (targetRotationX + Math.cos(elapsedTime * 0.2) * 0.5 - shape.rotation.x) * 0.006;
+        shape.rotation.y += (targetRotationY + Math.sin(elapsedTime * 0.2) * 0.5 - shape.rotation.y) * 0.05;
+        shape.rotation.x += (targetRotationX + Math.cos(elapsedTime * 0.2) * 0.5 - shape.rotation.x) * 0.05;
         
+        // Counter-rotate the inner core for a complex mechanical look
+        innerShape.rotation.y -= 0.01;
+        innerShape.rotation.x += 0.005;
+
         // Slight bobbing effect up and down
         shape.position.y = Math.sin(elapsedTime * 0.5) * 0.2;
+
+        // Update Debris
+        debris.forEach(deb => {
+            deb.rotation.x += deb.userData.rotSpeed;
+            deb.rotation.y += deb.userData.rotSpeed;
+            
+            // Subtle scroll parallax for debris
+            let targetY = deb.position.y;
+            targetY -= (currentScroll - smoothScrollBg) * 0.0001;
+            
+            // Mouse Repulsion for Debris
+            const normX = (mouseX / window.innerWidth) * 2 - 1;
+            const normY = -(mouseY / window.innerHeight) * 2 + 1;
+            
+            // Project screen mouse to 3D-ish space (simplified)
+            const mouse3D = new THREE.Vector3(normX * 8, normY * 5, deb.position.z);
+            const dist = deb.position.distanceTo(mouse3D);
+            
+            if (dist < 3) {
+                const push = new THREE.Vector3().subVectors(deb.position, mouse3D).normalize().multiplyScalar(0.05);
+                deb.position.add(push);
+            }
+
+            // Idle float
+            deb.position.y += Math.sin(elapsedTime * deb.userData.floatSpeed) * 0.002;
+        });
 
         renderer.render(scene, camera);
         requestAnimationFrame(render3D);
@@ -185,66 +264,98 @@ if (fgCanvas && typeof THREE !== 'undefined') {
     fgBack.position.set(-5, -5, -5);
     fgScene.add(fgBack);
 
-    // 1. Flowing Lights (Particles)
+    // 1. Flowing Lights (Particles) — Dense, thick, long flowing strands
     const particleGeometry = new THREE.BufferGeometry();
-    const particleCount = 40;
+    const particleCount = 60;
     const posArray = new Float32Array(particleCount * 3);
     const scaleArray = new Float32Array(particleCount);
     const phaseArray = new Float32Array(particleCount);
+    const speedArray = new Float32Array(particleCount); // per-particle speed variation
 
     for(let i = 0; i < particleCount * 3; i+=3) {
-        // Spread across screen
-        posArray[i] = (Math.random() - 0.5) * 30; // x
-        posArray[i+1] = (Math.random() - 0.5) * 20; // y
-        posArray[i+2] = (Math.random() - 0.5) * 5 + 2; // z (slightly in front)
+        // Wider spread across the viewport
+        posArray[i] = (Math.random() - 0.5) * 55;   // x — much wider spread
+        posArray[i+1] = (Math.random() - 0.5) * 50;  // y — much taller spread
+        posArray[i+2] = (Math.random() - 0.5) * 8 + 2; // z — depth layers
         
-        scaleArray[i/3] = Math.random() * 2;
-        phaseArray[i/3] = Math.random() * Math.PI * 2; // Random starting phase
+        scaleArray[i/3] = Math.random() * 1.5 + 0.5; // small individual dots
+        phaseArray[i/3] = Math.random() * Math.PI * 2;
+        speedArray[i/3] = 0.3 + Math.random() * 0.7; // speed variation 0.3-1.0
     }
 
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     particleGeometry.setAttribute('aScale', new THREE.BufferAttribute(scaleArray, 1));
     particleGeometry.setAttribute('aPhase', new THREE.BufferAttribute(phaseArray, 1));
+    particleGeometry.setAttribute('aSpeed', new THREE.BufferAttribute(speedArray, 1));
 
-    // Custom shader for soft glowing blurred dots
+
+
+    // Custom shader for soft glowing blurred dots — bigger, thicker, flowing, mouse-reactive
     const particleMaterial = new THREE.ShaderMaterial({
         uniforms: {
             time: { value: 0 },
+            uMouse: { value: new THREE.Vector2(0, 0) },
             color: { value: new THREE.Color(0xf7c00f) }
         },
         vertexShader: `
             attribute float aScale;
             attribute float aPhase;
+            attribute float aSpeed;
             varying float vPhase;
+            varying float vAlphaBoost;
             uniform float time;
+            uniform vec2 uMouse;
             
             void main() {
                 vPhase = aPhase;
-                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                vec3 pos = position;
                 
-                // Bobbing motion based on time and unique phase
-                mvPosition.y += sin(time * 0.5 + aPhase) * 1.5;
-                mvPosition.x += cos(time * 0.3 + aPhase) * 0.5;
+                // Gentle flowing drift
+                float t = time * aSpeed;
+                pos.y += sin(t * 0.18 + aPhase) * 6.0;
+                pos.x += cos(t * 0.12 + aPhase) * 2.8;
+                pos.z += sin(t * 0.07 + aPhase * 0.5) * 1.0;
+
+                // Mouse Repulsion Effect
+                vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                
+                // Calculate distance from mouse in clip space
+                // We use gl_Position after projection for a more accurate screen-space feel
+                vec4 clipPos = projectionMatrix * mvPosition;
+                vec2 screenPos = clipPos.xy / clipPos.w;
+                float dist = distance(screenPos, uMouse);
+                
+                if (dist < 0.45) {
+                    float force = (0.45 - dist) * 12.0;
+                    mvPosition.xy += normalize(screenPos - uMouse) * force;
+                }
+                
+                // Gentle size pulse
+                vAlphaBoost = 0.5 + 0.5 * sin(t * 0.25 + aPhase * 2.0);
                 
                 gl_Position = projectionMatrix * mvPosition;
-                // Size attenuation
-                gl_PointSize = 150.0 * aScale * (1.0 / -mvPosition.z);
+                // Much larger point size for thick, visible dots
+                gl_PointSize = 200.0 * aScale * (1.0 / -mvPosition.z);
             }
         `,
         fragmentShader: `
             uniform vec3 color;
             uniform float time;
             varying float vPhase;
+            varying float vAlphaBoost;
             
             void main() {
-                // Create a soft circle
+                // Create a soft circle with smoother falloff
                 float r = distance(gl_PointCoord, vec2(0.5));
                 if (r > 0.5) discard;
                 
-                // Soft glow edge
-                float alpha = (0.5 - r) * 2.0;
-                // Pulsing opacity
-                float pulse = 0.2 + 0.15 * sin(time * 1.5 + vPhase);
+                // Smooth cubic falloff for softer edges
+                float edge = 1.0 - smoothstep(0.0, 0.5, r);
+                float alpha = edge * edge;
+                
+                // Brighter pulsing opacity
+                float pulse = 0.30 + 0.20 * sin(time * 1.0 + vPhase);
+                pulse *= (0.7 + 0.3 * vAlphaBoost);
                 
                 gl_FragColor = vec4(color, alpha * pulse);
             }
@@ -297,7 +408,7 @@ if (fgCanvas && typeof THREE !== 'undefined') {
     };
     calcScrollOffset();
 
-    window.addEventListener('scroll', calcScrollOffset);
+    window.addEventListener('scroll', calcScrollOffset, { passive: true });
 
     // 4. Render Loop
     const fgClock = new THREE.Clock();
@@ -428,8 +539,13 @@ if (fgCanvas && typeof THREE !== 'undefined') {
         // Smoothly lerp scrollYOffset toward its target each frame
         scrollYOffset += (scrollYOffsetTarget - scrollYOffset) * 0.005;
 
-        // Update particle shader time
+        // Update particle shader time and mouse
         particleMaterial.uniforms.time.value = elapsedTime;
+        
+        // Calculate normalized mouse coordinates for the shader (-1 to +1)
+        const normMouseX = (mouseX / window.innerWidth) * 2 - 1;
+        const normMouseY = -(mouseY / window.innerHeight) * 2 + 1;
+        particleMaterial.uniforms.uMouse.value.set(normMouseX, normMouseY);
 
         // Update Companion Robot
         if (compMixer) compMixer.update(delta);
@@ -501,8 +617,8 @@ if (fgCanvas && typeof THREE !== 'undefined') {
 
 // --- Movie Vault: Built-in DB + Optional API + Suggestions + Filters ---
 // To enable live online search, get a free OMDB API key at https://www.omdbapi.com/apikey.aspx
-// Then replace 'YOUR_KEY_HERE' below with your key.
-const OMDB_API_KEY = 'eb456bed';
+// Then set OMDB_API_KEY in your .env file (see .env.example)
+const OMDB_API_KEY = 'YOUR_KEY_HERE';
 const OMDB_ENABLED = OMDB_API_KEY !== 'YOUR_KEY_HERE';
 
 const addMovieBtn = document.getElementById('addMovieBtn');
@@ -886,22 +1002,30 @@ if (dnaHelix) {
             const nodeBx = halfW - wave * amplitude;
 
             const r = rungs[i];
-            r.el.style.top = y + 'px';
+            
+            // Performant Y-translation using hardware acceleration
+            r.el.style.transform = `translate3d(0, ${y}px, 0)`;
 
-            r.nodeA.style.marginLeft = nodeAx + 'px';
-            r.nodeB.style.marginRight = (helixWidth - nodeBx) + 'px';
+            // Depth scale
+            const absDepth = Math.abs(depth);
+            const s = 0.5 + absDepth * 0.6;
+
+            // X-translation and scale combined
+            r.nodeA.style.transform = `translate3d(${nodeAx}px, 0, 0) scale(${s})`;
+            r.nodeB.style.transform = `translate3d(${nodeBx}px, 0, 0) scale(${s})`;
+
+            // Bar connects Node A and Node B
+            const minX = Math.min(nodeAx, nodeBx);
+            const maxX = Math.max(nodeAx, nodeBx);
+            const dist = maxX - minX;
+            // Native scaling avoids changing layout widths
+            r.bar.style.transform = `translate3d(${minX + 2.5}px, 0, 0) scaleX(${Math.max(0.01, dist - 5)})`;
 
             // Depth-based opacity for 3D illusion
-            const absDepth = Math.abs(depth);
             const frontOpacity = 0.25 + absDepth * 0.75;
             r.nodeA.style.opacity = frontOpacity;
             r.nodeB.style.opacity = frontOpacity;
             r.bar.style.opacity = 0.08 + absDepth * 0.25;
-
-            // Scale for depth
-            const s = 0.5 + absDepth * 0.6;
-            r.nodeA.style.transform = `scale(${s})`;
-            r.nodeB.style.transform = `scale(${s})`;
 
             // Glow intensity swaps based on which strand is "in front"
             if (depth > 0) {
