@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Curio's Universe</title>
     <meta name="description" content="Personal website of Curio - Robotics enthusiast, creator, and Dark Knight fan.">
+    <meta property="og:title" content="Curio's Universe">
+    <meta property="og:description"
+        content="Personal website of Curio - Robotics enthusiast, creator, and Dark Knight fan.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Curio's Universe">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
+
 <body>
     <!-- Custom Magnetic Cursor -->
     <div class="custom-cursor" id="customCursor"></div>
@@ -25,7 +33,8 @@
     <header>
         <div class="logo">CURIO</div>
         <nav>
-            <a href="https://www.youtube.com/@CurioRockerz" target="_blank" class="yt-link" id="nav-youtube">
+            <a href="https://www.youtube.com/@CurioRockerz" target="_blank" rel="noopener noreferrer" class="yt-link"
+                id="nav-youtube">
                 <i class="fa-brands fa-youtube"></i> CurioRockerz
             </a>
             <a href="#resume" class="resume-btn" id="nav-resume"><i class="fa-solid fa-file-pdf"></i> Resume</a>
@@ -35,7 +44,7 @@
     <main class="container">
         <!-- New Bento Grid Layout -->
         <div class="bento-grid">
-            
+
             <!-- Hero / Profile Card (Center focus, but in grid) -->
             <section class="glass-card bento-hero hidden-section">
                 <div class="spotlight-container" id="profileSpotlight">
@@ -44,22 +53,24 @@
                     <!-- Reveal Batman Image -->
                     <img src="assets/profile-batman.png" alt="Batman Persona" class="reveal-img">
                 </div>
-                <h1 class="glitch-text" data-text="THE SHADOW">THE SHADOW</h1>
-                <p class="tagline">Engineering Student | Software Developer</p>
+                <h1 class="glitch-text" data-text="Kartikey">Kartikey</h1>
+                <p class="tagline">Engineering Student | Creating. Exploring. Evolving.</p>
             </section>
 
             <!-- Card 1: About Me & IIT Mandi -->
             <section class="glass-card bento-about hidden-section" id="about">
-                <h2><i class="fa-solid fa-user-astronaut"></i> Identify</h2>
+                <h2><i class="fa-solid fa-user-astronaut"></i> About ME ?</h2>
                 <div class="iit-mandi-tag">
                     <i class="fa-solid fa-building-columns"></i>
-                    <span>IIT Mandi</span>
+                    <span><b>Indian Institute of Information Technology Mandi</b></span>
                     <div class="tag-glow"></div>
                 </div>
                 <p class="about-text">
-                    Engineering student passionate about dissecting tech. Architecting solutions using <strong>C++</strong>, <strong>Python</strong>, and solid <strong>DSA</strong> fundamentals. Built in the shadows, deployed to the world.
+                    <b>General Engineering Student</b> — learning to turn curiosity into code, ideas into systems, and
+                    late-night thoughts into something useful. Exploring <b>AI/ML</b>, <b>robotics</b>, and <b>expanding
+                        domain of knowledge</b> — with <b>video editing</b> and <b>gaming</b> in between.
                 </p>
-                
+
             </section>
 
             <!-- Card 2: Utility Belt -->
@@ -68,9 +79,12 @@
                 <div class="skills-container">
                     <span class="skill-tag"><i class="fa-brands fa-python"></i> Python</span>
                     <span class="skill-tag"><i class="fa-solid fa-code"></i> C++</span>
-                    <span class="skill-tag"><i class="fa-solid fa-network-wired"></i> DSA</span>
-                    <span class="skill-tag"><i class="fa-solid fa-film"></i> Video Editing</span>
-                    <span class="skill-tag"><i class="fa-solid fa-pen-nib"></i> Designing</span>
+                    <span class="skill-tag"><i class="fa-solid fa-diagram-project"></i> DSA</span>
+                    <span class="skill-tag"><i class="fa-solid fa-clapperboard"></i> Adobe Premiere Pro</span>
+                    <span class="skill-tag"><i class="fa-solid fa-palette"></i> Adobe Photoshop</span>
+                    <span class="skill-tag"><i class="fa-solid fa-cube"></i> SolidWorks</span>
+                    <!-- <span class="skill-tag"><i class="fa-solid fa-robot"></i> ROS</span> -->
+                    <span class="skill-tag"><i class="fa-solid fa-microchip"></i> Microcontrollers (Arduino/ESP)</span>
                 </div>
             </section>
 
@@ -82,7 +96,8 @@
                         <h3>IIT Mandi Robotronics Club</h3>
                         <span class="exp-date">Present</span>
                     </div>
-                    <p class="exp-desc">Active member specializing in hardware and robotics. Building next-generation automated systems.</p>
+                    <p class="exp-desc">Active member specializing in hardware and robotics. Building next-generation
+                        automated systems.</p>
                 </div>
             </section>
 
@@ -97,8 +112,10 @@
                             <p>Xpecto (Himalayas Biggest Techfest) • ₹25K Prize</p>
                             <div class="milestone-gallery">
                                 <!-- Place your images for this event here -->
-                                <img src="assets/placeholder.png" alt="Xpecto Memory 1" class="milestone-img" data-full="assets/placeholder.png">
-                                <img src="assets/placeholder.png" alt="Xpecto Memory 2" class="milestone-img" data-full="assets/placeholder.png">
+                                <img src="assets/placeholder.png" alt="Xpecto Memory 1" class="milestone-img"
+                                    data-full="assets/placeholder.png">
+                                <img src="assets/placeholder.png" alt="Xpecto Memory 2" class="milestone-img"
+                                    data-full="assets/placeholder.png">
                             </div>
                         </div>
                     </div>
@@ -109,7 +126,8 @@
                             <p>Utkarsh (IIT Mandi Event)</p>
                             <div class="milestone-gallery">
                                 <!-- Place your images for this event here -->
-                                <img src="assets/placeholder.png" alt="Utkarsh Memory 1" class="milestone-img" data-full="assets/placeholder.png">
+                                <img src="assets/placeholder.png" alt="Utkarsh Memory 1" class="milestone-img"
+                                    data-full="assets/placeholder.png">
                             </div>
                         </div>
                     </div>
@@ -122,22 +140,61 @@
                 <div class="spotify-content">
                     <p>Tap into my coding frequencies, playlists, and favorite dark synthwave mixes.</p>
                     <!-- Replace the href with your actual Spotify link -->
-                    <a href="https://open.spotify.com/" target="_blank" class="spotify-btn">Follow on Spotify</a>
+                    <a href="https://open.spotify.com/user/p5z559iajffy790t7wzwq8lpc" target="_blank"
+                        rel="noopener noreferrer" class="spotify-btn">Follow on Spotify</a>
                 </div>
             </section>
 
 
 
-            <!-- Card 5: Wayne Enterprises R&D (Projects) -->
+            <!-- Card 5: Crafting Table (Projects) -->
             <section class="glass-card bento-projects hidden-section" id="projects">
-                <h2><i class="fa-solid fa-flask"></i> Wayne Enterprises R&D</h2>
+                <h2>
+                    <svg class="crafting-block" viewBox="0 0 24 24" width="28" height="28"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="cubeTop" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffcc33" />
+                                <stop offset="100%" stop-color="#e6b800" />
+                            </linearGradient>
+                            <linearGradient id="cubeLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#cca300" />
+                                <stop offset="100%" stop-color="#997a00" />
+                            </linearGradient>
+                            <linearGradient id="cubeRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#e6b800" />
+                                <stop offset="100%" stop-color="#b38f00" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Top Face -->
+                        <path d="M12 2.5L20.5 7.5L12 12.5L3.5 7.5L12 2.5Z" fill="url(#cubeTop)"
+                            stroke="rgba(255,255,255,0.3)" stroke-width="0.5" />
+                        <!-- Left Face -->
+                        <path d="M3.5 7.5V17.5L12 22.5V12.5L3.5 7.5Z" fill="url(#cubeLeft)"
+                            stroke="rgba(255,255,255,0.15)" stroke-width="0.5" />
+                        <!-- Right Face -->
+                        <path d="M20.5 7.5V17.5L12 22.5V12.5L20.5 7.5Z" fill="url(#cubeRight)"
+                            stroke="rgba(255,255,255,0.15)" stroke-width="0.5" />
+                        <!-- Grid lines for crafting table top -->
+                        <path d="M6.3 9.1L14.8 14.1" stroke="rgba(0,0,0,0.3)" stroke-width="0.6" />
+                        <path d="M9.1 10.8L17.6 15.8" stroke="rgba(0,0,0,0.3)" stroke-width="0.6" />
+                        <path d="M17.6 9.1L9.1 14.1" stroke="rgba(0,0,0,0.3)" stroke-width="0.6" />
+                        <path d="M14.8 10.8L6.3 15.8" stroke="rgba(0,0,0,0.3)" stroke-width="0.6" />
+                        <!-- Small tool hints on the sides -->
+                        <circle cx="7.7" cy="14" r="1" fill="rgba(0,0,0,0.4)" />
+                        <path d="M16.3 14L18 12.5" stroke="rgba(0,0,0,0.4)" stroke-width="0.8" stroke-linecap="round" />
+                    </svg>
+                    Crafting Table
+                </h2>
                 <div class="projects-grid">
                     <div class="project-card">
                         <div class="project-info">
                             <h3>PDF-to-NTA Interface (Ongoing)</h3>
-                            <p>An ongoing AI/ML project that translates standard PDFs into interactive NTA-style mock examinations.</p>
+                            <p>An ongoing AI/ML project that translates standard PDFs into interactive NTA-style mock
+                                examinations.</p>
                         </div>
-                        <div class="project-tech-reveal"><span>Python</span> • <span>AI/ML</span> • <span>React</span></div>
+                        <div class="project-tech-reveal"><span>Python</span> • <span>AI/ML</span> • <span>React</span>
+                        </div>
                     </div>
                     <div class="project-card">
                         <div class="project-info">
@@ -149,7 +206,8 @@
                     <div class="project-card">
                         <div class="project-info">
                             <h3>Frontend-Fury</h3>
-                            <p>An interactive frontend component library with aesthetic designs and creative UI interactions.</p>
+                            <p>An interactive frontend component library with aesthetic designs and creative UI
+                                interactions.</p>
                         </div>
                         <div class="project-tech-reveal"><span>JavaScript</span> • <span>Frontend</span></div>
                     </div>
@@ -186,102 +244,150 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="vault-viewport">
                     <div class="vault-grid">
-                        
+
                         <!-- Add New Movie Card -->
-                        <div class="poster-card-vault vault-add-new" id="addMovieBtn">
-                            <div class="add-icon"><i class="fa-solid fa-plus"></i></div>
-                            <span>Add New Movie</span>
+                        <div class="vault-item-wrapper" id="addMovieBtnWrapper">
+                            <div class="poster-card-vault vault-add-new" id="addMovieBtn">
+                                <div class="add-icon"><i class="fa-solid fa-plus"></i></div>
+                                <span>Add New</span>
+                            </div>
+                            <div class="vault-item-title" style="opacity: 0; pointer-events: none;">Add</div>
                         </div>
 
                         <!-- Masterpiece 1 -->
-                        <div class="poster-card-vault masterpiece">
-                            <img src="assets/poster_batman.png" alt="The Dark Knight">
-                            <div class="vault-data-overlay">
-                                <div class="vault-rating">
-                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 9.0</span>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault masterpiece">
+                                <button class="vault-remove-btn" title="Remove Movie"><i class="fa-solid fa-xmark"></i></button>
+                                <img src="assets/poster_batman.png" alt="The Dark Knight">
+                                <div class="vault-data-overlay">
+                                    <div class="vault-rating">
+                                        <span class="imdb-score"><i class="fa-solid fa-star"></i> 9.0</span>
+                                    </div>
+                                    <p class="curio-rating">"A masterclass in tension and chaos."</p>
+                                    <label class="favorite-toggle">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                        <span class="fav-text">Favorite</span>
+                                    </label>
                                 </div>
-                                <p class="curio-rating">"A masterclass in tension and chaos."</p>
-                                <label class="favorite-toggle">
-                                    <input type="checkbox" checked>
-                                    <span class="slider"></span>
-                                    <span class="fav-text">Favorite</span>
-                                </label>
                             </div>
+                            <div class="vault-item-title">The Dark Knight</div>
                         </div>
 
                         <!-- Masterpiece 2 -->
-                        <div class="poster-card-vault masterpiece">
-                            <img src="assets/poster_dexter.png" alt="Dexter">
-                            <div class="vault-data-overlay">
-                                <div class="vault-rating">
-                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 8.6</span>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault masterpiece">
+                                <button class="vault-remove-btn" title="Remove Movie"><i class="fa-solid fa-xmark"></i></button>
+                                <img src="assets/poster_dexter.png" alt="Dexter">
+                                <div class="vault-data-overlay">
+                                    <div class="vault-rating">
+                                        <span class="imdb-score"><i class="fa-solid fa-star"></i> 8.6</span>
+                                    </div>
+                                    <p class="curio-rating">"Fascinating psychological thriller."</p>
+                                    <label class="favorite-toggle">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="fav-text">Favorite</span>
+                                    </label>
                                 </div>
-                                <p class="curio-rating">"Fascinating psychological thriller."</p>
-                                <label class="favorite-toggle">
-                                    <input type="checkbox">
-                                    <span class="slider"></span>
-                                    <span class="fav-text">Favorite</span>
-                                </label>
                             </div>
+                            <div class="vault-item-title">Dexter</div>
                         </div>
 
                         <!-- Masterpiece 3 -->
-                        <div class="poster-card-vault masterpiece">
-                            <img src="assets/poster_dark.png" alt="Dark">
-                            <div class="vault-data-overlay">
-                                <div class="vault-rating">
-                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 8.8</span>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault masterpiece">
+                                <button class="vault-remove-btn" title="Remove Movie"><i class="fa-solid fa-xmark"></i></button>
+                                <img src="assets/poster_dark.png" alt="Dark">
+                                <div class="vault-data-overlay">
+                                    <div class="vault-rating">
+                                        <span class="imdb-score"><i class="fa-solid fa-star"></i> 8.8</span>
+                                    </div>
+                                    <p class="curio-rating">"The ultimate mindbending time loop."</p>
+                                    <label class="favorite-toggle">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                        <span class="fav-text">Favorite</span>
+                                    </label>
                                 </div>
-                                <p class="curio-rating">"The ultimate mindbending time loop."</p>
-                                <label class="favorite-toggle">
-                                    <input type="checkbox" checked>
-                                    <span class="slider"></span>
-                                    <span class="fav-text">Favorite</span>
-                                </label>
                             </div>
+                            <div class="vault-item-title">Dark</div>
                         </div>
 
                         <!-- Masterpiece 4 -->
-                        <div class="poster-card-vault masterpiece">
-                            <img src="assets/poster_bb.png" alt="Breaking Bad">
-                            <div class="vault-data-overlay">
-                                <div class="vault-rating">
-                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 9.5</span>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault masterpiece">
+                                <button class="vault-remove-btn" title="Remove Movie"><i class="fa-solid fa-xmark"></i></button>
+                                <img src="assets/poster_bb.png" alt="Breaking Bad">
+                                <div class="vault-data-overlay">
+                                    <div class="vault-rating">
+                                        <span class="imdb-score"><i class="fa-solid fa-star"></i> 9.5</span>
+                                    </div>
+                                    <p class="curio-rating">"Perfection from start to finish."</p>
+                                    <label class="favorite-toggle">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                        <span class="fav-text">Favorite</span>
+                                    </label>
                                 </div>
-                                <p class="curio-rating">"Perfection from start to finish."</p>
-                                <label class="favorite-toggle">
-                                    <input type="checkbox" checked>
-                                    <span class="slider"></span>
-                                    <span class="fav-text">Favorite</span>
-                                </label>
                             </div>
+                            <div class="vault-item-title">Breaking Bad</div>
                         </div>
 
                         <!-- Masterpiece 5 -->
-                        <div class="poster-card-vault masterpiece">
-                            <img src="assets/poster_bcs.png" alt="Better Call Saul">
-                            <div class="vault-data-overlay">
-                                <div class="vault-rating">
-                                    <span class="imdb-score"><i class="fa-solid fa-star"></i> 8.9</span>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault masterpiece">
+                                <button class="vault-remove-btn" title="Remove Movie"><i class="fa-solid fa-xmark"></i></button>
+                                <img src="assets/poster_bcs.png" alt="Better Call Saul">
+                                <div class="vault-data-overlay">
+                                    <div class="vault-rating">
+                                        <span class="imdb-score"><i class="fa-solid fa-star"></i> 8.9</span>
+                                    </div>
+                                    <p class="curio-rating">"Slow burn brilliance, unmatched cinematography."</p>
+                                    <label class="favorite-toggle">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="fav-text">Favorite</span>
+                                    </label>
                                 </div>
-                                <p class="curio-rating">"Slow burn brilliance, unmatched cinematography."</p>
-                                <label class="favorite-toggle">
-                                    <input type="checkbox">
-                                    <span class="slider"></span>
-                                    <span class="fav-text">Favorite</span>
-                                </label>
                             </div>
+                            <div class="vault-item-title">Better Call Saul</div>
                         </div>
 
                         <!-- Background Padding Elements (to simulate deep archive) -->
-                        <div class="poster-card-vault back-row"><img src="https://upload.wikimedia.org/wikipedia/en/8/81/ShawshankRedemptionMoviePoster.jpg" alt="Archive"></div>
-                        <div class="poster-card-vault back-row dim"><img src="https://upload.wikimedia.org/wikipedia/en/b/b5/12_Angry_Men_%281957_film_poster%29.jpg" alt="Archive"></div>
-                        <div class="poster-card-vault back-row"><img src="https://upload.wikimedia.org/wikipedia/en/1/17/Batman_Begins_Poster.jpg" alt="Archive"></div>
-                        <div class="poster-card-vault back-row far"><img src="https://upload.wikimedia.org/wikipedia/en/8/8a/Dark_Knight_Rises_poster.jpg" alt="Archive"></div>
-                        <div class="poster-card-vault back-row far dim"><img src="https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg" alt="Archive"></div>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault back-row"><img
+                                    src="https://upload.wikimedia.org/wikipedia/en/8/81/ShawshankRedemptionMoviePoster.jpg"
+                                    alt="Archive"></div>
+                            <div class="vault-item-title" style="opacity: 0">A</div>
+                        </div>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault back-row dim"><img
+                                    src="https://upload.wikimedia.org/wikipedia/en/b/b5/12_Angry_Men_%281957_film_poster%29.jpg"
+                                    alt="Archive"></div>
+                            <div class="vault-item-title" style="opacity: 0">A</div>
+                        </div>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault back-row"><img
+                                    src="https://upload.wikimedia.org/wikipedia/en/1/17/Batman_Begins_Poster.jpg"
+                                    alt="Archive"></div>
+                            <div class="vault-item-title" style="opacity: 0">A</div>
+                        </div>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault back-row far"><img
+                                    src="https://upload.wikimedia.org/wikipedia/en/8/8a/Dark_Knight_Rises_poster.jpg"
+                                    alt="Archive"></div>
+                            <div class="vault-item-title" style="opacity: 0">A</div>
+                        </div>
+                        <div class="vault-item-wrapper">
+                            <div class="poster-card-vault back-row far dim"><img
+                                    src="https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg"
+                                    alt="Archive"></div>
+                            <div class="vault-item-title" style="opacity: 0">A</div>
+                        </div>
 
                     </div>
                 </div>
@@ -294,14 +400,19 @@
             <div class="contact-content">
                 <h2><i class="fa-solid fa-satellite-dish"></i> Establish Connection</h2>
                 <p>Looking to collaborate, solve a problem, or just talk tech and movies? My comms channel is open.</p>
-                
-                <a href="mailto:curiozii369@gmail.com" class="primary-btn"><i class="fa-regular fa-envelope"></i> Initiate Transmission</a>
-                
+
+                <a href="mailto:curiozii369@gmail.com" class="primary-btn"><i class="fa-regular fa-envelope"></i>
+                    Initiate Transmission</a>
+
                 <div class="social-links">
-                    <a href="https://github.com/curio369" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/kartikey-gupta-93053427b/" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="https://x.com/curio369" target="_blank" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-                    <a href="https://instagram.com/k4curio" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://github.com/curio369" target="_blank" rel="noopener noreferrer"
+                        aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/kartikey-gupta-93053427b/" target="_blank"
+                        rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://x.com/curio369" target="_blank" rel="noopener noreferrer"
+                        aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://instagram.com/k4curio" target="_blank" rel="noopener noreferrer"
+                        aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                 </div>
             </div>
         </section>
@@ -337,6 +448,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>

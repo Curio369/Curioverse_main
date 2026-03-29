@@ -25,6 +25,23 @@ body {
     cursor: none; /* Hide default cursor */
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(247, 192, 15, 0.2);
+    border-radius: 5px;
+    border: 2px solid var(--bg-color);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(247, 192, 15, 0.5);
+}
+
 /* Custom Cursor */
 .custom-cursor {
     position: fixed;
@@ -180,15 +197,25 @@ nav a {
     border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+    /* Faster transform for snappy parallax, slower for others */
+    transition: transform 0.2s ease-out, box-shadow 0.4s ease, border-color 0.4s ease, opacity 0.8s ease-out;
     overflow: hidden;
     position: relative;
+    transform-style: preserve-3d;
 }
 
 .glass-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-    border-color: rgba(247, 192, 15, 0.2);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 15px rgba(247, 192, 15, 0.1);
+    border-color: rgba(247, 192, 15, 0.3);
+}
+
+/* Combine hover and shown state for parallax */
+.glass-card.show-section {
+    transform: perspective(1000px) translateY(0) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+}
+
+.glass-card.show-section:hover {
+    transform: perspective(1000px) translateY(-5px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
 
 h2 {
@@ -205,13 +232,12 @@ h2 {
 /* Scroll Reveal Classes */
 .hidden-section {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transform: perspective(1000px) translateY(50px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
 }
 
 .hidden-section.show-section {
     opacity: 1;
-    transform: translateY(0);
+    /* transform handled by .glass-card.show-section above */
 }
 
 /* Specific Grid Assignments */
@@ -237,10 +263,16 @@ h2 {
 
 .bento-experience {
     grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .bento-milestones {
     grid-column: span 2;
+    grid-row: span 2;
+    display: flex;
+    flex-direction: column;
 }
 
 .bento-spotify {
@@ -248,6 +280,16 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+.bento-spotify::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: radial-gradient(circle at bottom right, rgba(30, 215, 96, 0.15) 0%, transparent 70%);
+    z-index: -1;
+    pointer-events: none;
 }
 
 
@@ -351,62 +393,102 @@ h2 {
 
 /* --- Experience / Operations --- */
 .exp-item {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: rgba(247, 192, 15, 0.05);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 8px 8px 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 1.5rem;
+    background: linear-gradient(90deg, rgba(247, 192, 15, 0.08) 0%, transparent 100%);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px 12px 12px 4px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-left-width 0.3s ease;
+}
+.exp-item::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(247, 192, 15, 0.03) 10px, rgba(247, 192, 15, 0.03) 20px);
+    pointer-events: none;
+}
+.exp-item:hover {
+    transform: translateX(5px);
+    border-left-width: 8px;
+    background: linear-gradient(90deg, rgba(247, 192, 15, 0.12) 0%, transparent 100%);
 }
 .exp-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
+    position: relative;
+    z-index: 1;
 }
 .exp-header h3 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--text-primary);
+    letter-spacing: 0.5px;
 }
 .exp-date {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--accent);
     font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(247, 192, 15, 0.15);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
 }
 .exp-desc {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--text-secondary);
-    line-height: 1.5;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
 }
 
 /* --- Milestones --- */
 .milestone-timeline {
     position: relative;
-    padding-left: 1.5rem;
-    margin-top: 1rem;
+    padding-left: 2rem;
+    margin-top: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 .milestone-timeline::before {
     content: '';
     position: absolute;
-    left: 4px; top: 0; bottom: 0;
+    left: 5px; top: 10px; bottom: 10px;
     width: 2px;
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(to bottom, var(--accent) 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
 }
 .milestone {
     position: relative;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 .milestone:last-child { margin-bottom: 0; }
 .milestone-dot {
     position: absolute;
-    left: -1.5rem; top: 5px;
-    width: 10px; height: 10px;
-    background: var(--accent);
+    left: -2rem; top: 5px;
+    width: 12px; height: 12px;
+    background: var(--bg-color);
+    border: 2px solid var(--accent);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--accent);
+    box-shadow: 0 0 12px rgba(247, 192, 15, 0.5);
+    transition: background 0.3s, transform 0.3s;
+}
+.milestone:hover .milestone-dot {
+    background: var(--accent);
+    transform: scale(1.3);
+}
+.milestone-content h4 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
 }
 .milestone-content p {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
 }
 
@@ -418,20 +500,22 @@ h2 {
 }
 
 .milestone-img {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid var(--glass-border);
+    border: 1px solid rgba(255,255,255,0.1);
     cursor: zoom-in;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: grayscale(40%) brightness(0.8);
 }
 
 .milestone-img:hover {
-    transform: scale(1.1);
+    transform: scale(1.15) rotate(2deg);
     border-color: var(--accent);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.7), 0 0 15px rgba(247, 192, 15, 0.3);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.7), 0 0 20px rgba(247, 192, 15, 0.4);
     z-index: 10;
+    filter: grayscale(0%) brightness(1.1);
 }
 
 /* --- Image Modal --- */
@@ -531,6 +615,24 @@ h2 {
 }
 
 
+
+/* --- Crafting Table Block --- */
+.crafting-block {
+    vertical-align: middle;
+    filter: drop-shadow(0 0 10px rgba(247, 192, 15, 0.4));
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.5s ease;
+}
+
+.bento-projects:hover .crafting-block {
+    transform: translateY(-5px) scale(1.15);
+    filter: drop-shadow(0 0 15px rgba(247, 192, 15, 0.7));
+    animation: crafting-float 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes crafting-float {
+    0% { transform: translateY(-5px) scale(1.15); filter: drop-shadow(0 0 15px rgba(247, 192, 15, 0.6)); }
+    100% { transform: translateY(-10px) scale(1.15); filter: drop-shadow(0 0 25px rgba(247, 192, 15, 0.9)); }
+}
 
 /* --- R&D Project Card --- */
 .project-card {
@@ -693,24 +795,72 @@ h2 {
 }
 .vault-viewport::-webkit-scrollbar { display: none; }
 
+/* Movie Vault Grid */
 .vault-grid {
     display: flex;
-    gap: 1.5rem;
-    transform-style: preserve-3d;
-    min-width: max-content;
-    padding: 0 1rem;
+    gap: 30px;
+    padding: 30px 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.vault-grid::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+/* Wrapper to hold poster and title */
+.vault-item-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.vault-item-wrapper:hover {
+    transform: translateY(-10px);
 }
 
 .poster-card-vault {
-    width: 160px;
+    min-width: 160px;
     height: 240px;
-    border-radius: 12px;
-    position: relative;
+    border-radius: var(--border-radius-md);
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
-    flex-shrink: 0;
-    border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.03); /* Placeholder background */
+}
+
+.poster-card-vault:hover {
+    box-shadow: 0 15px 40px rgba(0, 255, 213, 0.3);
+}
+
+/* Maintain hover effect on poster when wrapping */
+.vault-item-wrapper:hover .poster-card-vault {
+    transform: scale(1.05);
+}
+
+.vault-item-title {
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-align: center;
+    max-width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.8;
+    transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.vault-item-wrapper:hover .vault-item-title {
+    opacity: 1;
+    color: var(--accent-color);
 }
 
 .poster-card-vault img {
@@ -726,6 +876,48 @@ h2 {
     box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 20px rgba(247, 192, 15, 0.2);
     border-color: var(--accent);
     z-index: 10;
+}
+
+/* Remove Button (Dynamic Movies) */
+.vault-remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    z-index: 20;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.poster-card-vault.masterpiece:hover .vault-remove-btn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.vault-remove-btn:hover {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    transform: scale(1.1) rotate(90deg);
+    border-color: rgba(239, 68, 68, 1);
+}
+
+@keyframes scaleOut {
+    0% { transform: scale(1); opacity: 1; }
+    30% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0; }
 }
 
 /* Data Overlay (IMDb, Curio-Rating, Fav) */

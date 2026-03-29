@@ -1,4 +1,11 @@
+'use strict';
+
 const spotlight = document.getElementById('profileSpotlight');
+
+let isPageVisible = true;
+document.addEventListener("visibilitychange", () => {
+    isPageVisible = document.visibilityState === 'visible';
+});
 
 // --- Custom Cursor Logic ---
 const cursor = document.getElementById('customCursor');
@@ -14,17 +21,34 @@ document.addEventListener('mousemove', (e) => {
 
 // Smooth animation loop for cursor
 function animateCursor() {
-    // Ease the cursor position towards the actual mouse position
-    cursorX += (mouseX - cursorX) * 0.2;
-    cursorY += (mouseY - cursorY) * 0.2;
-    
+    // Ease the cursor position towards the actual mouse position using spring physics
+    cursorX += (mouseX - cursorX) * 0.15; // smoother dampening
+    cursorY += (mouseY - cursorY) * 0.15;
+
     if (cursor && cursorGlow) {
-        cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`; // Direct for the sharp circle
-        cursorGlow.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`; // Laggy for the glow
+        cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+        cursorGlow.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
     }
     requestAnimationFrame(animateCursor);
 }
 animateCursor();
+
+// Global Parallax for Glass Cards
+document.addEventListener('mousemove', (e) => {
+    const cards = document.querySelectorAll('.glass-card');
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+
+    // Calculate global mouse offset for parallax
+    const percentX = (e.clientX - centerX) / centerX;
+    const percentY = (e.clientY - centerY) / centerY;
+
+    cards.forEach(card => {
+        // Subtle tilt: max 2 degrees
+        card.style.setProperty('--tilt-x', `${percentY * -2}deg`);
+        card.style.setProperty('--tilt-y', `${percentX * 2}deg`);
+    });
+});
 
 // Add hover class to body when hovering interactive elements
 const interactables = document.querySelectorAll('a, button, .spotlight-container, .poster-card, .project-card, .poster-card-small');
@@ -88,7 +112,7 @@ const canvas = document.getElementById('bg-canvas');
 if (canvas && typeof THREE !== 'undefined') {
     // 1. Scene Setup
     const scene = new THREE.Scene();
-    
+
     // 2. Camera Setup
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
@@ -101,12 +125,12 @@ if (canvas && typeof THREE !== 'undefined') {
     // 4. Create Creative Geometric Object (A nested dark tech crystal)
     const geometry = new THREE.IcosahedronGeometry(2, 1);
     const innerGeometry = new THREE.IcosahedronGeometry(1.2, 0); // Sharper, simpler core
-    
-    const material = new THREE.MeshBasicMaterial({ 
-        color: 0xf7c00f, 
-        wireframe: true, 
+
+    const material = new THREE.MeshBasicMaterial({
+        color: 0xf7c00f,
+        wireframe: true,
         transparent: true,
-        opacity: 0.15 
+        opacity: 0.15
     });
 
     const innerMaterial = new THREE.MeshBasicMaterial({
@@ -115,7 +139,7 @@ if (canvas && typeof THREE !== 'undefined') {
         transparent: true,
         opacity: 0.05
     });
-    
+
     const shape = new THREE.Mesh(geometry, material);
     const innerShape = new THREE.Mesh(innerGeometry, innerMaterial);
     shape.add(innerShape); // Nesting it for synchronized base movement
@@ -140,17 +164,17 @@ if (canvas && typeof THREE !== 'undefined') {
             debrisGeometries[Math.floor(Math.random() * debrisGeometries.length)],
             debMaterial
         );
-        
+
         // Random spread
         debMesh.position.set(
             (Math.random() - 0.5) * 15,
             (Math.random() - 0.5) * 15,
             (Math.random() - 0.5) * 5 - 2
         );
-        
+
         // Random initial rotation
         debMesh.rotation.set(Math.random() * 10, Math.random() * 10, Math.random() * 10);
-        
+
         // Store speed meta-data
         debMesh.userData = {
             rotSpeed: (Math.random() - 0.5) * 0.02,
@@ -179,22 +203,31 @@ if (canvas && typeof THREE !== 'undefined') {
     const clock = new THREE.Clock();
 
     function render3D() {
+        if (!isPageVisible) {
+            requestAnimationFrame(render3D);
+            return;
+        }
+
         const elapsedTime = clock.getElapsedTime();
 
-        // Smoothly interpolate scroll value (eliminates jitter)
-        smoothScrollBg += (currentScroll - smoothScrollBg) * 0.04;
+        // Smoothly interpolate scroll value (eliminates jitter and rapid leaps)
+        smoothScrollBg += (currentScroll - smoothScrollBg) * 0.03;
 
-        // Map smoothed scroll to target rotation
-        targetRotationY = (smoothScrollBg * 0.003) + Math.PI / 4;
-        targetRotationX = (smoothScrollBg * 0.002) + Math.PI / 4;
+        // Normalize scroll to safely map rotations regardless of page height
+        const maxScroll = Math.max(1, document.body.scrollHeight - window.innerHeight);
+        const scrollPercent = smoothScrollBg / maxScroll;
 
-        // Add a slow constant idle rotation combined with the scroll target for a fluid feel
-        shape.rotation.y += (targetRotationY + Math.sin(elapsedTime * 0.2) * 0.5 - shape.rotation.y) * 0.05;
-        shape.rotation.x += (targetRotationX + Math.cos(elapsedTime * 0.2) * 0.5 - shape.rotation.x) * 0.05;
-        
-        // Counter-rotate the inner core for a complex mechanical look
-        innerShape.rotation.y -= 0.01;
-        innerShape.rotation.x += 0.005;
+        // Map normalized scroll to an elegant, constrained rotation
+        targetRotationY = (scrollPercent * Math.PI * 4) + Math.PI / 4; // Smooth 2 full turns
+        targetRotationX = (scrollPercent * Math.PI * 2) + Math.PI / 4; // Smooth 1 full turn
+
+        // Fluidly interpolate shape rotation towards target while adding an elegant idle float
+        shape.rotation.y += (targetRotationY + Math.sin(elapsedTime * 0.3) * 0.15 - shape.rotation.y) * 0.06;
+        shape.rotation.x += (targetRotationX + Math.cos(elapsedTime * 0.2) * 0.15 - shape.rotation.x) * 0.06;
+
+        // Graceful continuous counter-rotation for the inner core
+        innerShape.rotation.y -= 0.008;
+        innerShape.rotation.x += 0.004;
 
         // Slight bobbing effect up and down
         shape.position.y = Math.sin(elapsedTime * 0.5) * 0.2;
@@ -203,19 +236,19 @@ if (canvas && typeof THREE !== 'undefined') {
         debris.forEach(deb => {
             deb.rotation.x += deb.userData.rotSpeed;
             deb.rotation.y += deb.userData.rotSpeed;
-            
+
             // Subtle scroll parallax for debris
             let targetY = deb.position.y;
             targetY -= (currentScroll - smoothScrollBg) * 0.0001;
-            
+
             // Mouse Repulsion for Debris
             const normX = (mouseX / window.innerWidth) * 2 - 1;
             const normY = -(mouseY / window.innerHeight) * 2 + 1;
-            
+
             // Project screen mouse to 3D-ish space (simplified)
             const mouse3D = new THREE.Vector3(normX * 8, normY * 5, deb.position.z);
             const dist = deb.position.distanceTo(mouse3D);
-            
+
             if (dist < 3) {
                 const push = new THREE.Vector3().subVectors(deb.position, mouse3D).normalize().multiplyScalar(0.05);
                 deb.position.add(push);
@@ -228,7 +261,7 @@ if (canvas && typeof THREE !== 'undefined') {
         renderer.render(scene, camera);
         requestAnimationFrame(render3D);
     }
-    
+
     render3D();
 
     // 7. Handle Window Resize
@@ -243,11 +276,11 @@ if (canvas && typeof THREE !== 'undefined') {
 const fgCanvas = document.getElementById('fg-canvas');
 if (fgCanvas && typeof THREE !== 'undefined') {
     const fgScene = new THREE.Scene();
-    
+
     // Camera
     const fgCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     fgCamera.position.z = 10;
-    
+
     // Renderer
     const fgRenderer = new THREE.WebGLRenderer({ canvas: fgCanvas, alpha: true, antialias: true });
     fgRenderer.setSize(window.innerWidth, window.innerHeight);
@@ -272,15 +305,15 @@ if (fgCanvas && typeof THREE !== 'undefined') {
     const phaseArray = new Float32Array(particleCount);
     const speedArray = new Float32Array(particleCount); // per-particle speed variation
 
-    for(let i = 0; i < particleCount * 3; i+=3) {
+    for (let i = 0; i < particleCount * 3; i += 3) {
         // Wider spread across the viewport
         posArray[i] = (Math.random() - 0.5) * 55;   // x — much wider spread
-        posArray[i+1] = (Math.random() - 0.5) * 50;  // y — much taller spread
-        posArray[i+2] = (Math.random() - 0.5) * 8 + 2; // z — depth layers
-        
-        scaleArray[i/3] = Math.random() * 1.5 + 0.5; // small individual dots
-        phaseArray[i/3] = Math.random() * Math.PI * 2;
-        speedArray[i/3] = 0.3 + Math.random() * 0.7; // speed variation 0.3-1.0
+        posArray[i + 1] = (Math.random() - 0.5) * 50;  // y — much taller spread
+        posArray[i + 2] = (Math.random() - 0.5) * 8 + 2; // z — depth layers
+
+        scaleArray[i / 3] = Math.random() * 1.5 + 0.5; // small individual dots
+        phaseArray[i / 3] = Math.random() * Math.PI * 2;
+        speedArray[i / 3] = 0.3 + Math.random() * 0.7; // speed variation 0.3-1.0
     }
 
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -375,8 +408,8 @@ if (fgCanvas && typeof THREE !== 'undefined') {
     let targetY = 0;
 
     // --- NEW PHYSICS/EMOTIONS STATE ---
-    let compVelocity = new THREE.Vector3(0,0,0);
-    let compRotVelocity = new THREE.Vector3(0,0,0);
+    let compVelocity = new THREE.Vector3(0, 0, 0);
+    let compRotVelocity = new THREE.Vector3(0, 0, 0);
     let allActions = {};
     let idleAction = null;
     let currentAction = null;
@@ -388,23 +421,23 @@ if (fgCanvas && typeof THREE !== 'undefined') {
     let scrollYOffset = 0;
     let scrollYOffsetTarget = 0; // Raw target, smoothed per-frame
     let targetXOffset = 6.0;
-    
+
     // Calculate initial offset
     const calcScrollOffset = () => {
         const maxScroll = Math.max(1, document.body.scrollHeight - window.innerHeight);
         const scrollPercent = window.scrollY / maxScroll;
-        
+
         // Dynamically calculate visible space at z=0 (camera at z=10, distance=10)
         const vFov = (75 * Math.PI) / 180;
         const visibleHeight = 2 * Math.tan(vFov / 2) * 10;
         const visibleWidth = visibleHeight * (window.innerWidth / window.innerHeight);
-        
+
         // Map from top to bottom with some padding
         const verticalPadding = 2.0;
-        scrollYOffsetTarget = (visibleHeight / 2 - verticalPadding) - (scrollPercent * (visibleHeight - verticalPadding * 2)); 
-        
+        scrollYOffsetTarget = (visibleHeight / 2 - verticalPadding) - (scrollPercent * (visibleHeight - verticalPadding * 2));
+
         // Position on the right edge
-        targetXOffset = (visibleWidth / 2) - 1.5; 
+        targetXOffset = (visibleWidth / 2) - 1.5;
     };
     calcScrollOffset();
 
@@ -453,7 +486,7 @@ if (fgCanvas && typeof THREE !== 'undefined') {
             osc2.start(now);
             osc1.stop(now + 0.4);
             osc2.stop(now + 0.4);
-        } catch(e) { /* Audio context blocked */ }
+        } catch (e) { /* Audio context blocked */ }
     };
 
     // --- RAYCASTER FOR INTERACTION ---
@@ -464,13 +497,13 @@ if (fgCanvas && typeof THREE !== 'undefined') {
 
     window.addEventListener('pointerdown', (event) => {
         if (!companion) return; // Not ready yet
-        
+
         // Convert mouse position to normalized device coordinates (-1 to +1)
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
         raycaster.setFromCamera(mouse, fgCamera);
-        
+
         // Reliable Mathematical click detection on the exact Z-plane of the robot
         raycaster.ray.intersectPlane(planeZ, clickTarget);
         if (clickTarget) {
@@ -490,17 +523,17 @@ if (fgCanvas && typeof THREE !== 'undefined') {
         // 1. Play Random Emotion
         const emotions = ['thumbsup', 'yes', 'wave', 'jump', 'dance', 'punch'];
         const available = emotions.map(e => allActions[e]).filter(a => a);
-        
+
         if (available.length > 0 && currentAction) {
             const emotionAction = available[Math.floor(Math.random() * available.length)];
             emotionAction.reset();
             emotionAction.setLoop(THREE.LoopOnce, 1);
             emotionAction.clampWhenFinished = true;
-            
+
             emotionAction.play();
             currentAction.crossFadeTo(emotionAction, 0.2, true);
             currentAction = emotionAction;
-            
+
             const restoreIdle = (e) => {
                 if (e.action === emotionAction) {
                     compMixer.removeEventListener('finished', restoreIdle);
@@ -533,15 +566,17 @@ if (fgCanvas && typeof THREE !== 'undefined') {
 
     function renderForeground() {
         requestAnimationFrame(renderForeground);
+        if (!isPageVisible) return;
+
         const elapsedTime = fgClock.getElapsedTime();
         const delta = fgClock.getDelta();
-        
+
         // Smoothly lerp scrollYOffset toward its target each frame
         scrollYOffset += (scrollYOffsetTarget - scrollYOffset) * 0.005;
 
         // Update particle shader time and mouse
         particleMaterial.uniforms.time.value = elapsedTime;
-        
+
         // Calculate normalized mouse coordinates for the shader (-1 to +1)
         const normMouseX = (mouseX / window.innerWidth) * 2 - 1;
         const normMouseY = -(mouseY / window.innerHeight) * 2 + 1;
@@ -549,10 +584,10 @@ if (fgCanvas && typeof THREE !== 'undefined') {
 
         // Update Companion Robot
         if (compMixer) compMixer.update(delta);
-        
+
         if (companion) {
             // Wander freely anywhere in the website instead of sticking right
-            targetX = Math.sin(elapsedTime * 0.3) * (window.innerWidth / 150); 
+            targetX = Math.sin(elapsedTime * 0.3) * (window.innerWidth / 150);
             targetY = scrollYOffset + Math.cos(elapsedTime * 0.5) * 4.0;
 
             // Soft hover bob up and down integrated into target
@@ -566,7 +601,7 @@ if (fgCanvas && typeof THREE !== 'undefined') {
 
             // Damping (Friction)
             compVelocity.multiplyScalar(0.95);
-            
+
             // Apply Position
             companion.position.add(compVelocity);
 
@@ -616,10 +651,9 @@ if (fgCanvas && typeof THREE !== 'undefined') {
 }
 
 // --- Movie Vault: Built-in DB + Optional API + Suggestions + Filters ---
-// To enable live online search, get a free OMDB API key at https://www.omdbapi.com/apikey.aspx
-// Then set OMDB_API_KEY in your .env file (see .env.example)
-const OMDB_API_KEY = 'YOUR_KEY_HERE';
-const OMDB_ENABLED = OMDB_API_KEY !== 'YOUR_KEY_HERE';
+// OMDB_API_KEY is loaded securely from config.js (which is built from .env by start.bat)
+const OMDB_API_KEY = (window.ENV && window.ENV.OMDB_API_KEY) ? window.ENV.OMDB_API_KEY : 'YOUR_KEY_HERE';
+const OMDB_ENABLED = OMDB_API_KEY && OMDB_API_KEY !== 'YOUR_KEY_HERE';
 
 const addMovieBtn = document.getElementById('addMovieBtn');
 const movieSearchModal = document.getElementById('movieSearchModal');
@@ -697,41 +731,103 @@ if (suggestionsGrid) {
     });
 }
 
-// Load saved movies from localStorage on page load
+// Load saved movies from localStorage on page load and setup static cards
 function loadSavedMovies() {
+    // Hide static items that were permanently removed
+    let removedStatic = JSON.parse(localStorage.getItem('removedStaticMovies') || '[]');
+    document.querySelectorAll('.vault-item-wrapper:not([data-genre])').forEach(wrapper => {
+        const titleEl = wrapper.querySelector('.vault-item-title');
+        if (titleEl && removedStatic.includes(titleEl.innerText)) {
+            wrapper.remove(); // Remove immediately if previously deleted
+        }
+    });
+
     const saved = JSON.parse(localStorage.getItem('curioVaultMovies') || '[]');
     saved.forEach(movie => renderMovieCard(movie));
+
+    // Attach listeners to pre-existing static vault item remove buttons
+    document.querySelectorAll('.vault-item-wrapper:not([data-genre]) .vault-remove-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wrapper = btn.closest('.vault-item-wrapper');
+            if (wrapper) {
+                const titleEl = wrapper.querySelector('.vault-item-title');
+                if (titleEl) {
+                    let removed = JSON.parse(localStorage.getItem('removedStaticMovies') || '[]');
+                    if (!removed.includes(titleEl.innerText)) {
+                        removed.push(titleEl.innerText);
+                        localStorage.setItem('removedStaticMovies', JSON.stringify(removed));
+                    }
+                }
+
+                wrapper.style.animation = 'scaleOut 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+                setTimeout(() => {
+                    wrapper.remove();
+                }, 350);
+            }
+        });
+    });
 }
 
 // Render a single movie card in the vault grid
 function renderMovieCard(movie) {
-    const newCard = document.createElement('div');
-    newCard.className = 'poster-card-vault masterpiece';
-    newCard.style.animation = 'scaleIn 0.5s ease-out';
-    if (movie.genre) newCard.setAttribute('data-genre', movie.genre);
-    if (movie.rating) newCard.setAttribute('data-rating', movie.rating);
+    const newWrapper = document.createElement('div');
+    newWrapper.className = 'vault-item-wrapper';
+    newWrapper.style.animation = 'scaleIn 0.5s ease-out';
+
+    // We attach data to the wrapper or poster card
+    if (movie.genre) newWrapper.setAttribute('data-genre', movie.genre);
+    if (movie.rating) newWrapper.setAttribute('data-rating', movie.rating);
 
     const posterSrc = movie.poster && movie.poster !== 'N/A' && movie.poster !== 'null' && movie.poster !== ''
         ? movie.poster
         : 'https://placehold.co/300x450/1a1a2e/e0e0e0?text=No+Poster';
 
-    newCard.innerHTML = `
-        <img src="${posterSrc}" alt="${movie.title}">
-        <div class="vault-data-overlay">
-            <div class="vault-rating">
-                <span class="imdb-score"><i class="fa-solid fa-star"></i> ${movie.rating || 'N/A'}</span>
+    newWrapper.innerHTML = `
+        <div class="poster-card-vault masterpiece">
+            <button class="vault-remove-btn" title="Remove Movie"><i class="fa-solid fa-xmark"></i></button>
+            <img src="${posterSrc}" alt="${movie.title}">
+            <div class="vault-data-overlay">
+                <div class="vault-rating">
+                    <span class="imdb-score"><i class="fa-solid fa-star"></i> ${movie.rating || 'N/A'}</span>
+                </div>
+                <p class="curio-rating">"${movie.title}"</p>
+                <label class="favorite-toggle">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                    <span class="fav-text">Favorite</span>
+                </label>
             </div>
-            <p class="curio-rating">"${movie.title}"</p>
-            <label class="favorite-toggle">
-                <input type="checkbox">
-                <span class="slider"></span>
-                <span class="fav-text">Favorite</span>
-            </label>
         </div>
+        <div class="vault-item-title">${movie.title}</div>
     `;
 
-    const addButton = vaultGrid.querySelector('.vault-add-new');
-    vaultGrid.insertBefore(newCard, addButton.nextSibling);
+    // Important: Insert new wrapper right after the Add Movie wrapper
+    const addButtonWrapper = vaultGrid.querySelector('#addMovieBtnWrapper');
+    if (addButtonWrapper) {
+        vaultGrid.insertBefore(newWrapper, addButtonWrapper.nextSibling);
+    } else {
+        vaultGrid.appendChild(newWrapper);
+    }
+
+    const removeBtn = newWrapper.querySelector('.vault-remove-btn');
+    if (removeBtn) {
+        removeBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent triggering card interactions
+
+            // Exit animation on the whole wrapper
+            newWrapper.style.animation = 'scaleOut 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+
+            setTimeout(() => {
+                newWrapper.remove();
+            }, 350);
+
+            // Remove from local storage
+            let saved = JSON.parse(localStorage.getItem('curioVaultMovies') || '[]');
+            saved = saved.filter(m => !(m.title === movie.title && m.year === movie.year));
+            localStorage.setItem('curioVaultMovies', JSON.stringify(saved));
+        });
+    }
 }
 
 // Save a movie to localStorage and render it
@@ -911,10 +1007,10 @@ if (modal) {
     // Open modal on image click
     const milestoneImages = document.querySelectorAll('.milestone-img');
     milestoneImages.forEach(img => {
-        img.addEventListener('click', function() {
+        img.addEventListener('click', function () {
             modal.style.display = "flex";
             // slight delay to allow display flex to apply before opacity transition starts
-            setTimeout(() => modal.classList.add('active'), 10); 
+            setTimeout(() => modal.classList.add('active'), 10);
             modalImg.src = this.getAttribute('data-full') || this.src;
             captionText.innerHTML = this.alt;
         });
@@ -931,14 +1027,14 @@ if (modal) {
     }
 
     // Close if clicked anywhere outside the image
-    modal.onclick = function(event) {
+    modal.onclick = function (event) {
         if (event.target === modal) {
             closeModal();
         }
     }
 
     // Close on Escape key
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === "Escape" && modal.classList.contains('active')) {
             closeModal();
         }
@@ -1002,7 +1098,7 @@ if (dnaHelix) {
             const nodeBx = halfW - wave * amplitude;
 
             const r = rungs[i];
-            
+
             // Performant Y-translation using hardware acceleration
             r.el.style.transform = `translate3d(0, ${y}px, 0)`;
 

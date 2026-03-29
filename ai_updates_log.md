@@ -2,6 +2,13 @@
 
 *This file tracks all automated or AI-assisted features, upgrades, and modifications made to the project across all sessions.*
 
+## [2026-03-28 16:20] - Antigravity Guide Implementation & 3D Parallax
+- **SEO & Accessibility Phase:** Added Open Graph metadata and secured external links (`rel="noopener noreferrer"`) in `index.html`.
+- **3D Animation Phase:** Added a global CSS `--tilt` 3D parallax effect to all Bento Grid `.glass-card` elements driven by normalized mouse position.
+- **Performance Phase:** Modified Three.js render loops to pause when the browser tab is hidden (saving CPU/GPU). Upgraded custom cursor physics to use smoother `0.15` spring dampening.
+- **UI/UX Polish Phase:** Tailored custom dark mode WebKit scrollbars. Added deeper `rgba(0,0,0,0.8)` hover shadows and `preserve-3d` transforms for cards to enhance the premium glassmorphism.
+- **Security Phase:** Added `'use strict';` mode to `script.js` for robust error checking.
+
 ## [2026-03-26 01:34] - Interactive 3D Web Experience Polish
 - **Added:** Nested "Inner Core" Icosahedron to the background scene with counter-rotational animation for added mechanical depth.
 - **Added:** "Tech Debris" Field consisting of 15 floating low-poly wireframe shapes (Tetrahedrons/Octahedrons) with randomized drift and rotation.
